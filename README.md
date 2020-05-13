@@ -52,8 +52,8 @@ This application contains an implementation of Auditing and an implementation of
 	```
     The post call return a JSON object wiht the token type jsonwebtoken.
     
- 7. **Call other Rest Services **
- 	as http://localhost/list-user (type GET)
+ 7. **Call other Rest Services**
+ 	Call other Rest Services as http://localhost/list-user (type GET)
  	sending a Header "Autorization" with the value Bearer<yourtoken>
  	The app will verify if your token is valid in order to acces to http://localhost/list-user 
  	if your token is valid, the call will be succesfull, else the app return a 403 Error.
