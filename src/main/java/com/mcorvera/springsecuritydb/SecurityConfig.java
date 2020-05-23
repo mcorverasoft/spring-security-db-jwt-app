@@ -64,8 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// TODO Auto-generated method stub
 		http
 			
-			.csrf()
-        	.disable()
+		.cors()
+        .and()
+    .csrf()
+        .disable()
         	.exceptionHandling()
             .authenticationEntryPoint(unauthorizedHandler)
             .and()

@@ -32,20 +32,30 @@ public class User extends Audit<Long> {
 	private Long id;
 	@NotBlank
 	@Email
-	@Column(nullable = false)
+	@Column(nullable = false, length = 100)
 	private String email;
 	@NotBlank
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private String name;
 	
+	
 	@NotBlank
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
+	private String lastname;
+	
+	
+	@NotBlank
+	@Column(nullable = false, length = 100)
 	private String username;
 	
 	@NotBlank
 	@JsonIgnore
-	@Column(nullable=false)
+	@Column(nullable=false, length = 50)
 	private String password;
+	
+	@NotBlank
+	@Column(nullable = false, length = 25)
+	private String phone;
 	
 	@Column(nullable = false, name= "isaccountnonexpired")
 	private Boolean isaccountnonexpired=true;
@@ -69,12 +79,17 @@ public class User extends Audit<Long> {
 		super();
 	}
 	
-	public User(@NotBlank @Email String email, @NotBlank String username, @NotBlank String name, @NotBlank String password, List<Role> roles) {
+	public User(@NotBlank @Email String email, @NotBlank String username, @NotBlank String name, @NotBlank String lastname, 
+			@NotBlank String password,
+			@NotBlank String phone,
+			List<Role> roles) {
 		super();
 		this.email = email;
 		this.username = username;
 		this.name = name;
+		this.lastname=lastname;
 		this.password = password;
+		this.phone=phone;
 		this.roles=roles;
 	}
 	
@@ -96,6 +111,14 @@ public class User extends Audit<Long> {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
 	public String getPassword() {
 		return password;
 	}
@@ -138,6 +161,14 @@ public class User extends Audit<Long> {
 	public void setIsenabled(Boolean isenabled) {
 		this.isenabled = isenabled;
 	}
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
 	@Override
 	public void setCreatedBy(Long createdBy) {
 		// TODO Auto-generated method stub

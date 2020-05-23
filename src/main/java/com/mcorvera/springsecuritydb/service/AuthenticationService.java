@@ -56,7 +56,7 @@ public class AuthenticationService implements AuthenticationServiceI {
 		// TODO Auto-generated method stub
 		AuthenticationResponse authenticationResponse =new AuthenticationResponse();
 		try {
-			Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usernameOrEmail, password));
+			Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usernameOrEmail.toLowerCase(), password));
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 			//Generate the json web token to user:
 			String jwtToken=jwtTokenProvider.generateJwtToken((AuthenticatedUser) authentication.getPrincipal());	
@@ -90,11 +90,11 @@ public class AuthenticationService implements AuthenticationServiceI {
 				authenticationResponse.setError("the email already exist.");
 				return authenticationResponse;
 			}
-			
-			if(userRepository.existsByUsername(signup.getUsername())) {
-				authenticationResponse.setCreated(false);
-				authenticationResponse.setError("the username already exist.");
-				return authenticationResponse;
+			if (signup.getUsername()==null || signup.getUsername().isEmpty()) {
+				signup.setUsername(signup.getName().trim()+"."+signup.getLastname().trim());
+				if(userRepository.existsByUsername(signup.getUsername())) {
+					signup.setUsername((signup.getName().trim()+"."+signup.getLastname().trim()+String.valueOf(Math.random())).toLowerCase());
+				}
 			}
 			
 			Role role=roleRepository.findByName(RoleName.ROL_USER);
@@ -106,7 +106,7 @@ public class AuthenticationService implements AuthenticationServiceI {
 			List<Role> roles = new ArrayList<>();
 			roles.add(role);
 			
-			User user =new User(signup.getEmail(), signup.getUsername(), signup.getName(), bcrypt.encode(signup.getPassword()), roles);
+			User user =new User(signup.getEmail(), signup.getUsername(), signup.getName(), signup.getLastname(), bcrypt.encode(signup.getPassword()), signup.getPhone(), roles);
 			userRepository.save(user);
 			
 			Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signup.getEmail(), signup.getPassword()));

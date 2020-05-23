@@ -3,7 +3,6 @@ package com.mcorvera.springsecuritydb.model.security;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -30,10 +29,14 @@ public class AuthenticatedUser extends Audit<Long> implements UserDetails {
 
 	private String name;
 	
+	private String lastname;
+	
 	private String username;
 
 	@JsonIgnore
 	private String password;
+	
+	private String phone;
 	
 	private Collection<? extends GrantedAuthority> authorities;
 	
@@ -45,7 +48,8 @@ public class AuthenticatedUser extends Audit<Long> implements UserDetails {
 	
 	private boolean isEnabled;
 
-	public AuthenticatedUser(Long id, String email, String name, String username, String password,
+	public AuthenticatedUser(Long id, String email, String name, String username, String lastname, String password,
+			String phone,
 			Collection<? extends GrantedAuthority> authorities, boolean isAccountNonExpired, boolean isAccountNonLocked,
 			boolean isCredentialsNonExpired, boolean isEnabled, 
 			Instant createdAt, Long createdBy, Long lastModifiedBy, Instant updatedAt) {
@@ -54,7 +58,9 @@ public class AuthenticatedUser extends Audit<Long> implements UserDetails {
 		this.email = email;
 		this.name = name;
 		this.username = username;
+		this.lastname = lastname;
 		this.password = password;
+		this.phone=phone;
 		this.authorities = authorities;
 		this.isAccountNonExpired = isAccountNonExpired;
 		this.isAccountNonLocked = isAccountNonLocked;
@@ -83,7 +89,8 @@ public class AuthenticatedUser extends Audit<Long> implements UserDetails {
 		List<GrantedAuthority> authorities=user.getRoles().stream().map(role-> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
 		
 		
-		return new AuthenticatedUser(user.getId(), user.getEmail(), user.getName(), user.getUsername(), user.getPassword(),
+		return new AuthenticatedUser(user.getId(), user.getEmail(), user.getName(), user.getUsername(), user.getLastname(),
+				user.getPassword(), user.getPhone(),
 				authorities, user.getIsaccountnonexpired(), user.getIsaccountnonlocked(), user.getIscredentialsnonexpired(),
 				user.getIsenabled(),
 				user.getCreatedAt(), user.getCreatedBy(), user.getLastModifiedBy(), user.getUpdatedAt());
@@ -142,6 +149,30 @@ public class AuthenticatedUser extends Audit<Long> implements UserDetails {
 	public boolean isEnabled() {
 		// TODO Auto-generated method stub
 		return isEnabled;
+	}
+
+
+
+	public String getLastname() {
+		return lastname;
+	}
+
+
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
+	}
+
+
+
+	public String getPhone() {
+		return phone;
+	}
+
+
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 

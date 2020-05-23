@@ -4,10 +4,10 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mcorvera.springsecuritydb.beans.AuthenticationResponse;
@@ -29,6 +29,12 @@ public class AuthenticationRestController {
 		try {
 			authenticationResponse=authenticationServicei.authenticateUser(login.getUsernameOrEmail(), login.getPassword());
 		}catch( AuthenticationCredentialsNotFoundException ex){
+			authenticationResponse.setError(ex.getMessage());
+			
+		}catch(AuthenticationException ex) {
+			authenticationResponse.setError(ex.getMessage());
+		}
+		catch(Exception ex) {
 			authenticationResponse.setError(ex.getMessage());
 		}
 		return authenticationResponse;
